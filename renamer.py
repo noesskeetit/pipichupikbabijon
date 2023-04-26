@@ -1,12 +1,15 @@
 import os
 import shutil
-from PIL import Image, ImageDraw, ImageFont
+from PIL import ImageDraw, ImageFont
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-
+from PIL import Image, ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 # Путь к общей папке, где находятся все папки с моделями
 root_dir = "C:/Users/shura/Desktop/models"
+
+processed_folders_file = "processed.txt"
 
 # Папки, которые содержат изображения и видео
 pics_dir = "Pics"
@@ -19,9 +22,14 @@ for dirpath, dirnames, filenames in os.walk(root_dir):
         file_extension = os.path.splitext(file_path)[1]
         if file_extension.lower() in [".txt", ".pdf", ".gif"]:
             os.remove(file_path)
+        if str(file) == "@nsfwcherry [TG].png":
+            os.remove(file_path)
 
 # Переименовываем файлы в каждой папке
 for model_dir in os.listdir(root_dir):
+    if model_dir in open(processed_folders_file, 'r').read():
+        print(f"Skipping directory {model_dir}, already processed")
+        continue
     print(f"Processing directory: {model_dir}")
     model_dir_path = os.path.join(root_dir, model_dir)
     if os.path.isdir(model_dir_path):
@@ -58,6 +66,7 @@ for model_dir in os.listdir(root_dir):
                     # Рисуем текстовую вотермарку в левом нижнем углу изображения
                     draw.text((x, y), "t.me/vasodesangre", font=font, fill=(190, 190, 195, 255), outline=(0, 0, 0))
                     # Сохраняем изображение с вотермаркой в папке Pics
+
                     # img.save(os.path.join(model_dir_path, pics_dir, new_file_name))
 
                     # Удаляем оригинальное изображение
@@ -67,11 +76,14 @@ for model_dir in os.listdir(root_dir):
                     pic_num += 1
 
                 #Videos
-                elif file_extension.lower() in [".mp4", ".mov", ".m4v", ".ts"]:
+                elif file_extension.lower() in [".mp4", ".mov", ".m4v", ".ts", ".mkv"]:
                     # Переименовываем файлы в папке Vids
                     new_file_name = f"Video uploaded by Vaso de Sangre - Join TG @vasodesangre {vid_num}{file_extension}"
                     shutil.move(file_path, os.path.join(model_dir_path, vids_dir, new_file_name))
                     vid_num += 1
+
+    with open(processed_folders_file, 'a') as f:
+        f.write(model_dir + '\n')
 
         # Удаляем пустые папки
         for dirpath, dirnames, filenames in os.walk(model_dir_path, topdown=False):
