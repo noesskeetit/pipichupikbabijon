@@ -1,5 +1,4 @@
 import os
-import cv2
 import shutil
 from PIL import Image, ImageDraw, ImageFont
 import warnings
@@ -18,11 +17,12 @@ for dirpath, dirnames, filenames in os.walk(root_dir):
     for file in filenames:
         file_path = os.path.join(dirpath, file)
         file_extension = os.path.splitext(file_path)[1]
-        if file_extension.lower() in [".txt", ".pdf"]:
+        if file_extension.lower() in [".txt", ".pdf", ".gif"]:
             os.remove(file_path)
 
 # Переименовываем файлы в каждой папке
 for model_dir in os.listdir(root_dir):
+    print(f"Processing directory: {model_dir}")
     model_dir_path = os.path.join(root_dir, model_dir)
     if os.path.isdir(model_dir_path):
         # Создаем папки Pics и Vids, если их нет
@@ -52,17 +52,22 @@ for model_dir in os.listdir(root_dir):
                     draw = ImageDraw.Draw(img)
                     font = ImageFont.truetype("MYRIADPRO-REGULAR.OTF", size=int(((height*width//1600)**0.5)))
                     # Вычисляем координаты для левого нижнего угла текста
-                    text_width, text_height = draw.textsize(new_file_name, font)
+                    text_width, text_height = draw.textsize("t.me/vasodesangre", font)
                     x = 10
                     y = height - text_height - 10
                     # Рисуем текстовую вотермарку в левом нижнем углу изображения
                     draw.text((x, y), "t.me/vasodesangre", font=font, fill=(190, 190, 195, 255), outline=(0, 0, 0))
                     # Сохраняем изображение с вотермаркой в папке Pics
+                    # img.save(os.path.join(model_dir_path, pics_dir, new_file_name))
+
+                    # Удаляем оригинальное изображение
+                    os.remove(file_path)
+                    # Сохраняем изображение с вотермаркой под тем же именем и в той же папке
                     img.save(os.path.join(model_dir_path, pics_dir, new_file_name))
                     pic_num += 1
 
                 #Videos
-                elif file_extension.lower() in [".mp4", ".mov", ".m4v", ".ts", ".gif"]:
+                elif file_extension.lower() in [".mp4", ".mov", ".m4v", ".ts"]:
                     # Переименовываем файлы в папке Vids
                     new_file_name = f"Video uploaded by Vaso de Sangre - Join TG @vasodesangre {vid_num}{file_extension}"
                     shutil.move(file_path, os.path.join(model_dir_path, vids_dir, new_file_name))
