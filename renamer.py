@@ -23,7 +23,7 @@ for dirpath, dirnames, filenames in os.walk(root_dir):
         file_extension = os.path.splitext(file_path)[1]
         if file_extension.lower() in [".txt", ".pdf", ".gif", ".jfif", ".json", ".html", ".js", ".css"]:
             os.remove(file_path)
-        if str(file) == "@nsfwcherry [TG].png" or "thumb" in str(file):
+        if str(file) == "@nsfwcherry [TG].png" or "thumb" in str(file) or str(file) == "cherrylekz.com.JPEG":
             os.remove(file_path)
 
 # Переименовываем файлы в каждой папке
