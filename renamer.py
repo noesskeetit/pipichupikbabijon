@@ -52,7 +52,6 @@ for model_dir in os.listdir(root_dir):
         for dirpath, dirnames, filenames in os.walk(model_dir_path):
 
             for file in tqdm(filenames):
-                print(file)
                 try:
                     file_path = os.path.join(dirpath, file)
                     file_extension = os.path.splitext(file_path)[1]
