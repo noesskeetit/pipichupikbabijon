@@ -7,11 +7,12 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 from PIL import ImageDraw, ImageFont, Image, ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 import time
+import uuid
 
 
 
 # Путь к общей папке, где находятся все папки с моделями
-root_dir = "C:/Users/shura/Desktop/models"
+root_dir = "E:/models_danil"
 
 processed_folders_file = "C:/Users/shura/PycharmProjects/telegram_bot_test/processed.txt"
 
@@ -21,6 +22,7 @@ vids_dir = "Vids"
 
 # Удаляем файлы формата .txt и .pdf and so on
 for dirpath, dirnames, filenames in os.walk(root_dir):
+    print(dirnames)
     for file in filenames:
         file_path = os.path.join(dirpath, file)
         file_extension = os.path.splitext(file_path)[1]
@@ -58,12 +60,12 @@ for model_dir in os.listdir(root_dir):
                     #Photos
                     if file_extension.lower() in [".jpg", ".png",".jpeg", ".bmp", ".jfif"]:
                         # Переименовываем файлы в папке Pics
-                        new_file_name = f"Image uploaded by Vaso de Sangre - Join TG @vasodesangre - {pic_num}{file_extension}"
+                        new_file_name = f"Image uploaded by Vaso de Sangre - Join TG @vasodesangre - {pic_num} - {str(uuid.uuid4())}{file_extension}"
                         # Открываем изображение
                         img = Image.open(file_path)
                         # Получаем размер изображения
                         width, height = img.size
-                        if width > 600 and height > 600:
+                        if width > 900 and height > 900:
                             # Создаем объект ImageDraw и объект шрифта
                             draw = ImageDraw.Draw(img)
                             font = ImageFont.truetype("MYRIADPRO-REGULAR.OTF", size=int(((height*width//1600)**0.5)))
@@ -76,10 +78,10 @@ for model_dir in os.listdir(root_dir):
                             # Сохраняем изображение с вотермаркой в папке Pics
                             # img.save(os.path.join(model_dir_path, pics_dir, new_file_name))
                             # Удаляем оригинальное изображение
-                            os.remove(file_path)
                             # Сохраняем изображение с вотермаркой под тем же именем и в той же папке
                             # img.save(os.path.join(model_dir_path, pics_dir, new_file_name))
                             img.save(os.path.join(dirpath, new_file_name))
+                            os.remove(file_path)
                             pic_num += 1
                         else:
                             img.close()
@@ -89,9 +91,9 @@ for model_dir in os.listdir(root_dir):
                     elif file_extension.lower() in [".mp4", ".mov", ".m4v", ".ts", ".mkv"]:
                             if os.path.getsize(file_path) > 3145700:
                                 # Переименовываем файлы в папке Vids
-                                new_file_name = f"Video uploaded by Vaso de Sangre - Join TG @vasodesangre - {vid_num}{file_extension}"
-                                # shutil.move(file_path, os.path.join(model_dir_path, vids_dir, new_file_name))
-                                shutil.move(file_path, os.path.join(dirpath, new_file_name))
+                                new_file_name = f"Video uploaded by Vaso de Sangre - Join TG @vasodesangre - {vid_num} - {str(uuid.uuid4())}{file_extension}"
+                                shutil.move(file_path, os.path.join(model_dir_path, vids_dir, new_file_name))
+                                # shutil.move(file_path, os.path.join(dirpath, new_file_name))
                                 vid_num += 1
                             else:
                                 os.remove(file_path)
