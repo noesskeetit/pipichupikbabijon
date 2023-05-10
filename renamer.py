@@ -12,9 +12,9 @@ import uuid
 
 
 # Путь к общей папке, где находятся все папки с моделями
-root_dir = "E:/models_danil"
+root_dir = "C:/models/emil_download"
 
-processed_folders_file = "C:/Users/shura/PycharmProjects/telegram_bot_test/processed.txt"
+processed_folders_file = "C:/Users/e.madatov/PycharmProjects/pipichupikbabijon/processed.txt"
 
 # Папки, которые содержат изображения и видео
 pics_dir = "Pics"
@@ -22,7 +22,6 @@ vids_dir = "Vids"
 
 # Удаляем файлы формата .txt и .pdf and so on
 for dirpath, dirnames, filenames in os.walk(root_dir):
-    print(dirnames)
     for file in filenames:
         file_path = os.path.join(dirpath, file)
         file_extension = os.path.splitext(file_path)[1]
@@ -60,7 +59,7 @@ for model_dir in os.listdir(root_dir):
                     #Photos
                     if file_extension.lower() in [".jpg", ".png",".jpeg", ".bmp", ".jfif"]:
                         # Переименовываем файлы в папке Pics
-                        new_file_name = f"Image uploaded by Vaso de Sangre - Join TG @vasodesangre - {pic_num} - {str(uuid.uuid4())}{file_extension}"
+                        new_file_name = f"Image uploaded by Vaso de Sangre - Join TG @vasodesangre - {pic_num}{file_extension}"
                         # Открываем изображение
                         img = Image.open(file_path)
                         # Получаем размер изображения
@@ -91,28 +90,29 @@ for model_dir in os.listdir(root_dir):
                     elif file_extension.lower() in [".mp4", ".mov", ".m4v", ".ts", ".mkv"]:
                             if os.path.getsize(file_path) > 3145700:
                                 # Переименовываем файлы в папке Vids
-                                new_file_name = f"Video uploaded by Vaso de Sangre - Join TG @vasodesangre - {vid_num} - {str(uuid.uuid4())}{file_extension}"
+                                new_file_name = f"Video uploaded by Vaso de Sangre - Join TG @vasodesangre - {vid_num}{file_extension}"
                                 shutil.move(file_path, os.path.join(model_dir_path, vids_dir, new_file_name))
                                 # shutil.move(file_path, os.path.join(dirpath, new_file_name))
                                 vid_num += 1
                             else:
                                 os.remove(file_path)
                                 vid_num += 1
-                except OSError as o:
-                    print(f"Removing file {file}, error: {o}")
-                    os.remove(os.path.join(dirpath, file))
-                    continue
-                except TypeError as t:
-                    print(f"Removing file {file}, error: {t}")
-                    os.remove(os.path.join(dirpath, file))
-                    continue
-                except ValueError as v:
-                    print(f"Removing file {file}, error: {v}")
-                    os.remove(os.path.join(dirpath, file))
-                    continue
+                # except OSError as o:
+                #     print(f"Removing file {file}, error: {o}")
+                #     os.remove(os.path.join(dirpath, file))
+                #     continue
+                # except TypeError as t:
+                #     print(f"Removing file {file}, error: {t}")
+                #     os.remove(os.path.join(dirpath, file))
+                #     continue
+                # except ValueError as v:
+                #     print(f"Removing file {file}, error: {v}")
+                #     os.remove(os.path.join(dirpath, file))
+                #     continue
                 except:
                     print(f"Removing file {file}, Unexpected error")
-                    os.remove(os.path.join(dirpath, file))
+                    if os.path.exists(os.path.join(dirpath, file)):
+                        os.remove(os.path.join(dirpath, file))
                     continue
 
 
